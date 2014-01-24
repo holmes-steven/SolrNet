@@ -1,0 +1,168 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<response>
+  <lst name="responseHeader">
+    <int name="status">0</int>
+    <int name="QTime">1</int>
+    <lst name="params">
+      <str name="group.format">grouped</str>
+      <str name="q">*:*</str>
+      <str name="group.limit">10</str>
+      <arr name="group.query">
+        <str>manu_exact:"Kempes ltd"</str>
+        <str>-manu_exact:"Kempes ltd"</str>
+      </arr>
+      <str name="group">true</str>
+      <str name="wt">xml</str>
+    </lst>
+  </lst>
+  <lst name="grouped">
+    <lst name="manu_exact:&quot;Kempes ltd&quot;">
+      <int name="matches">6</int>
+      <result name="doclist" numFound="2" start="0">
+        <doc>
+          <str name="id">GROUP003</str>
+          <str name="guid">00000000-0000-0000-0000-000000000000</str>
+          <str name="name">Group test product 3</str>
+          <str name="manu">Kempes ltd</str>
+          <arr name="cat">
+            <str>electronics</str>
+            <str>test products</str>
+          </arr>
+          <arr name="features">
+            <str>feature 1</str>
+            <str>feature 2</str>
+          </arr>
+          <float name="weight">0.0</float>
+          <float name="price">110.0</float>
+          <int name="popularity">5</int>
+          <bool name="inStock">false</bool>
+          <date name="timestamp">0001-01-01T00:00:00Z</date>
+          <str name="price_c">123.44,EUR</str>
+          <float name="value_regular">150.0</float>
+          <float name="value_afterrebate">100.0</float>
+          <long name="_version_">1457932660798128128</long>
+        </doc>
+        <doc>
+          <str name="id">GROUP005</str>
+          <str name="guid">00000000-0000-0000-0000-000000000000</str>
+          <str name="name">Group test product 5</str>
+          <str name="manu">Kempes ltd</str>
+          <arr name="cat">
+            <str>electronics</str>
+            <str>test products</str>
+          </arr>
+          <arr name="features">
+            <str>feature 1</str>
+            <str>feature 2</str>
+          </arr>
+          <float name="weight">0.0</float>
+          <float name="price">110.0</float>
+          <int name="popularity">5</int>
+          <bool name="inStock">false</bool>
+          <date name="timestamp">0001-01-01T00:00:00Z</date>
+          <str name="price_c">123.44,EUR</str>
+          <float name="value_regular">150.0</float>
+          <float name="value_afterrebate">100.0</float>
+          <long name="_version_">1457932660803371008</long>
+        </doc>
+      </result>
+    </lst>
+    <lst name="-manu_exact:&quot;Kempes ltd&quot;">
+      <int name="matches">6</int>
+      <result name="doclist" numFound="4" start="0">
+        <doc>
+          <str name="id">GROUP001</str>
+          <str name="guid">00000000-0000-0000-0000-000000000000</str>
+          <str name="name">Group test product 1</str>
+          <str name="manu">Ardiles ltd</str>
+          <arr name="cat">
+            <str>electronics</str>
+            <str>test products</str>
+          </arr>
+          <arr name="features">
+            <str>feature 1</str>
+            <str>feature 2</str>
+          </arr>
+          <float name="weight">0.0</float>
+          <float name="price">100.0</float>
+          <int name="popularity">5</int>
+          <bool name="inStock">false</bool>
+          <date name="timestamp">0001-01-01T00:00:00Z</date>
+          <str name="price_c">123.44,EUR</str>
+          <float name="value_regular">150.0</float>
+          <float name="value_afterrebate">100.0</float>
+          <long name="_version_">1457932660790788096</long>
+        </doc>
+        <doc>
+          <str name="id">GROUP002</str>
+          <str name="guid">00000000-0000-0000-0000-000000000000</str>
+          <str name="name">Group test product 2</str>
+          <str name="manu">Villa ltd</str>
+          <arr name="cat">
+            <str>electronics</str>
+            <str>test products</str>
+          </arr>
+          <arr name="features">
+            <str>feature 1</str>
+            <str>feature 2</str>
+          </arr>
+          <float name="weight">0.0</float>
+          <float name="price">92.0</float>
+          <int name="popularity">3</int>
+          <bool name="inStock">false</bool>
+          <date name="timestamp">0001-01-01T00:00:00Z</date>
+          <str name="price_c">123.44,EUR</str>
+          <float name="value_regular">150.0</float>
+          <float name="value_afterrebate">100.0</float>
+          <long name="_version_">1457932660794982400</long>
+        </doc>
+        <doc>
+          <str name="id">GROUP004</str>
+          <str name="guid">00000000-0000-0000-0000-000000000000</str>
+          <str name="name">Group test product 4</str>
+          <str name="manu">Ardiles ltd</str>
+          <arr name="cat">
+            <str>electronics</str>
+            <str>test products</str>
+          </arr>
+          <arr name="features">
+            <str>feature 1</str>
+            <str>feature 2</str>
+          </arr>
+          <float name="weight">0.0</float>
+          <float name="price">100.0</float>
+          <int name="popularity">5</int>
+          <bool name="inStock">false</bool>
+          <date name="timestamp">0001-01-01T00:00:00Z</date>
+          <str name="price_c">123.44,EUR</str>
+          <float name="value_regular">150.0</float>
+          <float name="value_afterrebate">100.0</float>
+          <long name="_version_">1457932660801273856</long>
+        </doc>
+        <doc>
+          <str name="id">GROUP006</str>
+          <str name="guid">00000000-0000-0000-0000-000000000000</str>
+          <str name="name">Group test product 6</str>
+          <str name="manu">Ardiles ltd</str>
+          <arr name="cat">
+            <str>electronics</str>
+            <str>test products</str>
+          </arr>
+          <arr name="features">
+            <str>feature 1</str>
+            <str>feature 2</str>
+          </arr>
+          <float name="weight">0.0</float>
+          <float name="price">100.0</float>
+          <int name="popularity">5</int>
+          <bool name="inStock">false</bool>
+          <date name="timestamp">0001-01-01T00:00:00Z</date>
+          <str name="price_c">123.44,EUR</str>
+          <float name="value_regular">150.0</float>
+          <float name="value_afterrebate">100.0</float>
+          <long name="_version_">1457932660806516736</long>
+        </doc>
+      </result>
+    </lst>
+  </lst>
+</response>

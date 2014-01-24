@@ -32,7 +32,8 @@ namespace SolrNet.Tests.Integration {
     [TestFixture]
     [Category("Integration")]
     public class IntegrationFixture {
-        private static readonly string serverURL = ConfigurationManager.AppSettings["solr"];
+        //private static readonly string serverURL = ConfigurationManager.AppSettings["solr"];
+        private static readonly string serverURL = "http://localhost:8983/solr";
         private static readonly Lazy<object> init = new Lazy<object>(() => {
             Startup.Init<Product>(new LoggingConnection(new SolrConnection(serverURL)));
             return null;
@@ -169,6 +170,142 @@ namespace SolrNet.Tests.Integration {
                 InStock = false,
             }
         };
+
+        private static readonly IEnumerable<Product> productsForGrouping = new[] {
+            new Product {
+                Id = "GROUP001",
+                Name = "Group test product 1",
+                Manufacturer = "Ardiles ltd",
+                Categories = new[] {
+                    "electronics",
+                    "test products",
+                },
+                Features = new[] {
+                    "feature 1",
+                    "feature 2",
+                },
+                Prices = new Dictionary<string, decimal> {
+                    {"regular", 150m},
+                    {"afterrebate", 100m},
+                },
+                Price = 100,
+                PriceMoney = new Money(123.44m, "EUR"),
+                Popularity = 5,
+                InStock = false,
+            },
+            new Product {
+                Id = "GROUP002",
+                Name = "Group test product 2",
+                Manufacturer = "Villa ltd",
+                Categories = new[] {
+                    "electronics",
+                    "test products",
+                },
+                Features = new[] {
+                    "feature 1",
+                    "feature 2",
+                },
+                Prices = new Dictionary<string, decimal> {
+                    {"regular", 150m},
+                    {"afterrebate", 100m},
+                },
+                Price = 92,
+                PriceMoney = new Money(123.44m, "EUR"),
+                Popularity = 3,
+                InStock = false,
+            },
+            new Product {
+                Id = "GROUP003",
+                Name = "Group test product 3",
+                Manufacturer = "Kempes ltd",
+                Categories = new[] {
+                    "electronics",
+                    "test products",
+                },
+                Features = new[] {
+                    "feature 1",
+                    "feature 2",
+                },
+                Prices = new Dictionary<string, decimal> {
+                    {"regular", 150m},
+                    {"afterrebate", 100m},
+                },
+                Price = 110,
+                PriceMoney = new Money(123.44m, "EUR"),
+                Popularity = 5,
+                InStock = false,
+            },
+            new Product {
+                Id = "GROUP004",
+                Name = "Group test product 4",
+                Manufacturer = "Ardiles ltd",
+                Categories = new[] {
+                    "electronics",
+                    "test products",
+                },
+                Features = new[] {
+                    "feature 1",
+                    "feature 2",
+                },
+                Prices = new Dictionary<string, decimal> {
+                    {"regular", 150m},
+                    {"afterrebate", 100m},
+                },
+                Price = 100,
+                PriceMoney = new Money(123.44m, "EUR"),
+                Popularity = 5,
+                InStock = false,
+            },
+            new Product {
+                Id = "GROUP005",
+                Name = "Group test product 5",
+                Manufacturer = "Kempes ltd",
+                Categories = new[] {
+                    "electronics",
+                    "test products",
+                },
+                Features = new[] {
+                    "feature 1",
+                    "feature 2",
+                },
+                Prices = new Dictionary<string, decimal> {
+                    {"regular", 150m},
+                    {"afterrebate", 100m},
+                },
+                Price = 110,
+                PriceMoney = new Money(123.44m, "EUR"),
+                Popularity = 5,
+                InStock = false,
+            },
+            new Product {
+                Id = "GROUP006",
+                Name = "Group test product 6",
+                Manufacturer = "Ardiles ltd",
+                Categories = new[] {
+                    "electronics",
+                    "test products",
+                },
+                Features = new[] {
+                    "feature 1",
+                    "feature 2",
+                },
+                Prices = new Dictionary<string, decimal> {
+                    {"regular", 150m},
+                    {"afterrebate", 100m},
+                },
+                Price = 100,
+                PriceMoney = new Money(123.44m, "EUR"),
+                Popularity = 5,
+                InStock = false,
+            }
+        };
+
+        [Test]
+        public void QueryByGroupQuery() {
+            var solr = ServiceLocator.Current.GetInstance<ISolrOperations<Product>>();
+            solr.AddRange(productsForGrouping);
+            solr.Commit();
+        }
 
         [Test]
         public void QueryByRangeMoney() {

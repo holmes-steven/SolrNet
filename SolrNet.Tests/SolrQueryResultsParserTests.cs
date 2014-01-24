@@ -644,16 +644,45 @@ namespace SolrNet.Tests {
         }
 
 		[Test]
-		public void ParseResultsWithGroups() {
+        public void ParseResultsWithGroupField() {
+
+		    const string Field = "inStock";
+
 			var mapper = new AttributesMappingManager();
 			var parser = new GroupingResponseParser<Product>(new SolrDocumentResponseParser<Product>(mapper, new DefaultDocumentVisitor(mapper, new DefaultFieldParser()), new SolrDocumentActivator<Product>()));
 		    var xml = EmbeddedResource.GetEmbeddedXml(GetType(), "Resources.responseWithGroupingOnInstock.xml");
+
 		    var results = new SolrQueryResults<Product>();
 		    parser.Parse(xml, results);
+
 			Assert.AreEqual(1, results.Grouping.Count);
-			Assert.AreEqual(2, results.Grouping["inStock"].Groups.Count());
-			Assert.AreEqual(13, results.Grouping["inStock"].Groups.First().NumFound);
+            Assert.AreEqual(2, results.Grouping[Field].Groups.Count());
+            Assert.AreEqual(13, results.Grouping[Field].Groups.First().NumFound);
+            Assert.AreEqual("true", results.Grouping[Field].Groups.First().GroupValue);
+            Assert.AreEqual("false", results.Grouping[Field].Groups.Last().GroupValue);
 		}
+
+	    [Test]
+	    public void ParseResultsWithGroupQuery() {
+
+	        const string InclusiveQuery = "manu_exact:\"Kempes ltd\"";
+	        const string ExclusiveQuery = "-" + InclusiveQuery;
+
+            var mapper = new AttributesMappingManager();
+            var parser = new GroupingResponseParser<Product>(new SolrDocumentResponseParser<Product>(mapper, new DefaultDocumentVisitor(mapper, new DefaultFieldParser()), new SolrDocumentActivator<Product>()));
+            var xml = EmbeddedResource.GetEmbeddedXml(GetType(), "Resources.responseWithGroupQuery.xml");
+
+            var results = new SolrQueryResults<Product>();
+            parser.Parse(xml, results);
+
+            Assert.AreEqual(2, results.Grouping.Count);
+            Assert.IsTrue(results.Grouping.ContainsKey(InclusiveQuery));
+            Assert.IsTrue(results.Grouping.ContainsKey(ExclusiveQuery));
+            Assert.AreEqual(InclusiveQuery, results.Grouping[InclusiveQuery].Groups.First().GroupValue);
+            Assert.AreEqual(ExclusiveQuery, results.Grouping[ExclusiveQuery].Groups.First().GroupValue);
+            Assert.AreEqual(2, results.Grouping[InclusiveQuery].Groups.First().NumFound);
+            Assert.AreEqual(4, results.Grouping[ExclusiveQuery].Groups.First().NumFound);
+	    }
 
 		[Test]
 		public void ParseResultsWithFacetPivot()

@@ -16,7 +16,9 @@
 
 #endregion
 
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using MbUnit.Framework;
 using Moroco;
@@ -459,6 +461,54 @@ namespace SolrNet.Tests {
             Assert.Contains(p, KV.Create("spellcheck.dictionary", "spanish"));
             Assert.Contains(p, KV.Create("spellcheck.onlyMorePopular", "true"));
             Assert.Contains(p, KV.Create("spellcheck.reload", "true"));
+        }
+
+        [Test]
+        public void GetAllParameters_with_multiple_group_fields()
+        {
+            var querySerializer = new SolrQuerySerializerStub("*:*");
+            var queryExecuter = new SolrQueryExecuter<TestDocument>(null, null, querySerializer, null, null);
+            var p = queryExecuter.GetAllParameters(SolrQuery.All, new QueryOptions
+            {
+                Grouping = new GroupingParameters
+                {
+                    Fields = new Collection<string> { "fieldx", "fieldy", "fieldz" }
+                }
+            }).ToList();
+            Assert.Contains(p, KV.Create("group.field", "fieldx"));
+            Assert.Contains(p, KV.Create("group.field", "fieldy"));
+            Assert.Contains(p, KV.Create("group.field", "fieldz"));
+        }
+
+        [Test]
+        public void GetAllParameters_with_multiple_group_queries() {
+            var querySerializer = new SolrQuerySerializerStub("*:*");
+            var queryExecuter = new SolrQueryExecuter<TestDocument>(null, null, querySerializer, null, null);
+            var p = queryExecuter.GetAllParameters(SolrQuery.All, new QueryOptions {
+                Grouping = new GroupingParameters {
+                    Query = new Collection<string> { "apple", "banana", "cherry" }
+                }
+            }).ToList();
+            Assert.Contains(p, KV.Create("group.query", "apple") );
+            Assert.Contains(p, KV.Create("group.query", "banana"));
+            Assert.Contains(p, KV.Create("group.query", "cherry"));
+        }
+
+        [Test]
+        public void GetAllParameters_with_both_group_fields_and_group_queries() {
+            var querySerializer = new SolrQuerySerializerStub("*:*");
+            var queryExecuter = new SolrQueryExecuter<TestDocument>(null, null, querySerializer, null, null);
+            var p = queryExecuter.GetAllParameters(SolrQuery.All, new QueryOptions
+            {
+                Grouping = new GroupingParameters
+                {
+                    Query = new Collection<string> { "apple", "banana", "cherry" },
+                    Fields = new Collection<string> { "fieldx", "fieldy", "fieldz" }
+                }
+            }).ToList();
+
+            IEnumerable<string> groupParameters = p.Where(param => param.Key.StartsWith("group.")).Select(param => param.Key);
+            Assert.IsEmpty(groupParameters, "The invalid combination of group.fields and group.query should not have generated any group parameters.");
         }
 
         [Test]

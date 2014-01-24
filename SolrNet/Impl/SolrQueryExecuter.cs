@@ -25,12 +25,14 @@ using SolrNet.Commands.Parameters;
 using SolrNet.Exceptions;
 using SolrNet.Utils;
 
-namespace SolrNet.Impl {
+namespace SolrNet.Impl
+{
     /// <summary>
     /// Executes queries
     /// </summary>
     /// <typeparam name="T">Document type</typeparam>
-    public class SolrQueryExecuter<T> : ISolrQueryExecuter<T> {
+    public class SolrQueryExecuter<T> : ISolrQueryExecuter<T>
+    {
         private readonly ISolrAbstractResponseParser<T> resultParser;
         private readonly ISolrMoreLikeThisHandlerQueryResultsParser<T> mlthResultParser;
         private readonly ISolrConnection connection;
@@ -75,7 +77,8 @@ namespace SolrNet.Impl {
         /// <param name="querySerializer"></param>
         /// <param name="facetQuerySerializer"></param>
         /// <param name="mlthResultParser"></param>
-        public SolrQueryExecuter(ISolrAbstractResponseParser<T> resultParser, ISolrConnection connection, ISolrQuerySerializer querySerializer, ISolrFacetQuerySerializer facetQuerySerializer, ISolrMoreLikeThisHandlerQueryResultsParser<T> mlthResultParser) {
+        public SolrQueryExecuter(ISolrAbstractResponseParser<T> resultParser, ISolrConnection connection, ISolrQuerySerializer querySerializer, ISolrFacetQuerySerializer facetQuerySerializer, ISolrMoreLikeThisHandlerQueryResultsParser<T> mlthResultParser)
+        {
             this.resultParser = resultParser;
             this.mlthResultParser = mlthResultParser;
             this.connection = connection;
@@ -91,7 +94,8 @@ namespace SolrNet.Impl {
         /// </summary>
         /// <param name="options"></param>
         /// <returns></returns>
-        public IEnumerable<KeyValuePair<string, string>> GetCommonParameters(CommonQueryOptions options) {
+        public IEnumerable<KeyValuePair<string, string>> GetCommonParameters(CommonQueryOptions options)
+        {
             if (options == null)
                 yield break;
 
@@ -121,7 +125,8 @@ namespace SolrNet.Impl {
         /// <param name="Query"></param>
         /// <param name="options"></param>
         /// <returns></returns>
-        public IEnumerable<KeyValuePair<string, string>> GetAllParameters(ISolrQuery Query, QueryOptions options) {
+        public IEnumerable<KeyValuePair<string, string>> GetAllParameters(ISolrQuery Query, QueryOptions options)
+        {
             yield return KV.Create("q", querySerializer.Serialize(Query));
             if (options == null)
                 yield break;
@@ -141,7 +146,8 @@ namespace SolrNet.Impl {
             foreach (var p in GetTermsParameters(options))
                 yield return p;
 
-            if (options.MoreLikeThis != null) {
+            if (options.MoreLikeThis != null)
+            {
                 foreach (var p in GetMoreLikeThisParameters(options.MoreLikeThis))
                     yield return p;
             }
@@ -152,8 +158,8 @@ namespace SolrNet.Impl {
             foreach (var p in GetCollapseQueryOptions(options))
                 yield return p;
 
-			foreach (var p in GetTermVectorQueryOptions(options))
-				yield return p;
+            foreach (var p in GetTermVectorQueryOptions(options))
+                yield return p;
 
             foreach (var p in GetGroupingQueryOptions(options))
                 yield return p;
@@ -168,7 +174,8 @@ namespace SolrNet.Impl {
         /// <param name="query"></param>
         /// <param name="options"></param>
         /// <returns></returns>
-        public IEnumerable<KeyValuePair<string, string>> GetAllMoreLikeThisHandlerParameters(SolrMLTQuery query, MoreLikeThisHandlerQueryOptions options) {
+        public IEnumerable<KeyValuePair<string, string>> GetAllMoreLikeThisHandlerParameters(SolrMLTQuery query, MoreLikeThisHandlerQueryOptions options)
+        {
             yield return
                 query.Switch<KeyValuePair<string, string>>(
                              query: q => KV.Create("q", querySerializer.Serialize(q)),
@@ -190,7 +197,8 @@ namespace SolrNet.Impl {
         /// </summary>
         /// <param name="fp"></param>
         /// <returns></returns>
-        public IEnumerable<KeyValuePair<string, string>> GetFacetFieldOptions(FacetParameters fp) {
+        public IEnumerable<KeyValuePair<string, string>> GetFacetFieldOptions(FacetParameters fp)
+        {
             if (fp == null)
                 yield break;
             if (fp.Queries == null || fp.Queries.Count == 0)
@@ -223,7 +231,8 @@ namespace SolrNet.Impl {
         /// </summary>
         /// <param name="mlt"></param>
         /// <returns></returns>
-        public IEnumerable<KeyValuePair<string, string>> GetMoreLikeThisHandlerParameters(MoreLikeThisHandlerParameters mlt) {
+        public IEnumerable<KeyValuePair<string, string>> GetMoreLikeThisHandlerParameters(MoreLikeThisHandlerParameters mlt)
+        {
             if (mlt.MatchInclude != null)
                 yield return KV.Create("mlt.match.include", mlt.MatchInclude.Value.ToString().ToLowerInvariant());
 
@@ -242,7 +251,8 @@ namespace SolrNet.Impl {
         /// </summary>
         /// <param name="mlt"></param>
         /// <returns></returns>
-        public IEnumerable<KeyValuePair<string, string>> GetMoreLikeThisParameters(MoreLikeThisParameters mlt) {
+        public IEnumerable<KeyValuePair<string, string>> GetMoreLikeThisParameters(MoreLikeThisParameters mlt)
+        {
             yield return KV.Create("mlt", "true");
             if (mlt.Fields != null)
                 yield return KV.Create("mlt.fl", string.Join(",", mlt.Fields.ToArray()));
@@ -269,10 +279,12 @@ namespace SolrNet.Impl {
         /// <summary>
         /// Gets Solr parameters for defined filter queries
         /// </summary>
-        public IEnumerable<KeyValuePair<string, string>> GetFilterQueries(ICollection<ISolrQuery> filterQueries) {
+        public IEnumerable<KeyValuePair<string, string>> GetFilterQueries(ICollection<ISolrQuery> filterQueries)
+        {
             if (filterQueries == null || filterQueries.Count == 0)
                 yield break;
-            foreach (var fq in filterQueries) {
+            foreach (var fq in filterQueries)
+            {
                 yield return new KeyValuePair<string, string>("fq", querySerializer.Serialize(fq));
             }
         }
@@ -280,12 +292,15 @@ namespace SolrNet.Impl {
         /// <summary>
         /// Gets Solr parameters for defined highlightings
         /// </summary>
-        public IDictionary<string, string> GetHighlightingParameters(QueryOptions Options) {
+        public IDictionary<string, string> GetHighlightingParameters(QueryOptions Options)
+        {
             var param = new Dictionary<string, string>();
-            if (Options.Highlight != null) {
+            if (Options.Highlight != null)
+            {
                 var h = Options.Highlight;
                 param["hl"] = "true";
-                if (h.Fields != null) {
+                if (h.Fields != null)
+                {
                     param["hl.fl"] = string.Join(",", h.Fields.ToArray());
 
                     if (h.Snippets.HasValue)
@@ -343,7 +358,8 @@ namespace SolrNet.Impl {
         /// <summary>
         /// Gets solr parameters for defined spell-checking
         /// </summary>
-        public IEnumerable<KeyValuePair<string, string>> GetSpellCheckingParameters(QueryOptions Options) {
+        public IEnumerable<KeyValuePair<string, string>> GetSpellCheckingParameters(QueryOptions Options)
+        {
             var spellCheck = Options.SpellCheck;
             if (spellCheck == null)
                 yield break;
@@ -370,20 +386,24 @@ namespace SolrNet.Impl {
         /// </summary>
         /// <param name="options"></param>
         /// <returns></returns>
-        public IEnumerable<KeyValuePair<string, string>> GetStatsQueryOptions(QueryOptions options) {
+        public IEnumerable<KeyValuePair<string, string>> GetStatsQueryOptions(QueryOptions options)
+        {
             if (options.Stats == null || options.Stats.FieldsWithFacets.Count == 0)
                 yield break;
 
             yield return KV.Create("stats", "true");
 
-            foreach (var fieldAndFacet in options.Stats.FieldsWithFacets) {
+            foreach (var fieldAndFacet in options.Stats.FieldsWithFacets)
+            {
                 var field = fieldAndFacet.Key;
                 if (string.IsNullOrEmpty(field))
                     continue;
                 var facets = fieldAndFacet.Value;
                 yield return KV.Create("stats.field", field);
-                if (facets != null && facets.Count > 0) {
-                    foreach (var facet in facets) {
+                if (facets != null && facets.Count > 0)
+                {
+                    foreach (var facet in facets)
+                    {
                         if (string.IsNullOrEmpty(facet))
                             continue;
                         yield return KV.Create(string.Format("f.{0}.stats.facet", field), facet);
@@ -394,7 +414,8 @@ namespace SolrNet.Impl {
             if (options.Stats.Facets == null || options.Stats.Facets.Count == 0)
                 yield break;
 
-            foreach (var facet in options.Stats.Facets) {
+            foreach (var facet in options.Stats.Facets)
+            {
                 if (string.IsNullOrEmpty(facet))
                     continue;
                 yield return KV.Create("stats.facet", facet);
@@ -406,7 +427,8 @@ namespace SolrNet.Impl {
         /// </summary>
         /// <param name="options"></param>
         /// <returns></returns>
-        public IEnumerable<KeyValuePair<string, string>> GetCollapseQueryOptions(QueryOptions options) {
+        public IEnumerable<KeyValuePair<string, string>> GetCollapseQueryOptions(QueryOptions options)
+        {
             if (options.Collapse == null || string.IsNullOrEmpty(options.Collapse.Field))
                 yield break;
 
@@ -419,11 +441,16 @@ namespace SolrNet.Impl {
                 yield return KV.Create("collapse.maxdocs", options.Collapse.MaxDocs.ToString());
         }
 
-        public static IEnumerable<string> GetTermVectorParameterOptions(TermVectorParameterOptions o) {
-            if ((o & TermVectorParameterOptions.All) == TermVectorParameterOptions.All) {
+        public static IEnumerable<string> GetTermVectorParameterOptions(TermVectorParameterOptions o)
+        {
+            if ((o & TermVectorParameterOptions.All) == TermVectorParameterOptions.All)
+            {
                 yield return "tv.all";
-            } else {
-                if ((o & TermVectorParameterOptions.TermFrequency_InverseDocumentFrequency) == TermVectorParameterOptions.TermFrequency_InverseDocumentFrequency) {
+            }
+            else
+            {
+                if ((o & TermVectorParameterOptions.TermFrequency_InverseDocumentFrequency) == TermVectorParameterOptions.TermFrequency_InverseDocumentFrequency)
+                {
                     yield return "tv.tf";
                     yield return "tv.df";
                     yield return "tv.tf_idf";
@@ -439,17 +466,19 @@ namespace SolrNet.Impl {
             }
         }
 
-		/// <summary>
-		/// Gets the Solr parameters for collapse queries
-		/// </summary>
-		/// <param name="options"></param>
-		/// <returns></returns>
-		public static IEnumerable<KeyValuePair<string, string>> GetTermVectorQueryOptions(QueryOptions options) {
-			if (options.TermVector == null || !options.TermVector.Fields.Any())
-				yield break;
+        /// <summary>
+        /// Gets the Solr parameters for collapse queries
+        /// </summary>
+        /// <param name="options"></param>
+        /// <returns></returns>
+        public static IEnumerable<KeyValuePair<string, string>> GetTermVectorQueryOptions(QueryOptions options)
+        {
+            if (options.TermVector == null || !options.TermVector.Fields.Any())
+                yield break;
 
-			yield return KV.Create("tv", "true");
-            if (options.TermVector.Fields != null) {
+            yield return KV.Create("tv", "true");
+            if (options.TermVector.Fields != null)
+            {
                 var fields = string.Join(",", options.TermVector.Fields.ToArray());
                 if (!string.IsNullOrEmpty(fields))
                     yield return KV.Create("tv.fl", fields);
@@ -457,7 +486,7 @@ namespace SolrNet.Impl {
 
             foreach (var o in GetTermVectorParameterOptions(options.TermVector.Options).Distinct())
                 yield return KV.Create(o, "true");
-		}
+        }
 
         /// <summary>
         /// Gets the Solr parameters for collapse queries
@@ -465,16 +494,30 @@ namespace SolrNet.Impl {
         /// <param name="options"></param>
         /// <returns></returns>
         public IEnumerable<KeyValuePair<string, string>> GetGroupingQueryOptions(QueryOptions options) {
-            if (options.Grouping == null || options.Grouping.Fields.Count == 0)
+
+            // Yield nothing if grouping options have not been supplied at all.
+            if (options.Grouping == null)
+                yield break;
+
+            bool hasFields = options.Grouping.Fields != null && options.Grouping.Fields.Count > 0;
+            bool hasQueries = options.Grouping.Query != null && options.Grouping.Query.Count > 0;
+            
+            // Group-by-field and group-by-query are mutually exclusive.
+            if (hasFields && hasQueries)
                 yield break;
 
             yield return KV.Create("group", true.ToString().ToLowerInvariant());
 
-            foreach (var groupfield in options.Grouping.Fields) {
-                if (string.IsNullOrEmpty(groupfield))
-                    continue;
-                yield return KV.Create("group.field", groupfield);
+            // Group-by-field            
+            if (hasFields) {
+                foreach (var groupfield in options.Grouping.Fields)
+                {
+                    if (string.IsNullOrEmpty(groupfield))
+                        continue;
+                    yield return KV.Create("group.field", groupfield);
+                }
             }
+          
             if (options.Grouping.Limit.HasValue)
                 yield return KV.Create("group.limit", options.Grouping.Limit.ToString());
 
@@ -484,8 +527,16 @@ namespace SolrNet.Impl {
             if (options.Grouping.Main.HasValue)
                 yield return KV.Create("group.main", options.Grouping.Main.ToString().ToLowerInvariant());
 
-            if (!string.IsNullOrEmpty(options.Grouping.Query))
-                yield return KV.Create("group.query", options.Grouping.Query);
+            // Group-by-query
+            if (hasQueries)
+            {
+                foreach (var groupquery in options.Grouping.Query)
+                {
+                    if (string.IsNullOrEmpty(groupquery))
+                        continue;
+                    yield return KV.Create("group.query", groupquery);
+                } 
+            }
 
             if (!string.IsNullOrEmpty(options.Grouping.Func))
                 yield return KV.Create("group.func", options.Grouping.Func);
@@ -504,7 +555,8 @@ namespace SolrNet.Impl {
         /// </summary>
         /// <param name="options"></param>
         /// <returns></returns>
-        public IEnumerable<KeyValuePair<string, string>> GetClusteringParameters(QueryOptions options) {
+        public IEnumerable<KeyValuePair<string, string>> GetClusteringParameters(QueryOptions options)
+        {
             if (options.Clustering == null)
                 yield break;
             var clst = options.Clustering;
@@ -540,7 +592,8 @@ namespace SolrNet.Impl {
         /// </summary>
         /// <param name="Options"></param>
         /// <returns></returns>
-        public static IEnumerable<KeyValuePair<string, string>> GetTermsParameters(QueryOptions Options) {
+        public static IEnumerable<KeyValuePair<string, string>> GetTermsParameters(QueryOptions Options)
+        {
             var terms = Options.Terms;
             if (terms == null)
                 yield break;
@@ -580,7 +633,8 @@ namespace SolrNet.Impl {
         /// Executes the query and returns results
         /// </summary>
         /// <returns>query results</returns>
-        public SolrQueryResults<T> Execute(ISolrQuery q, QueryOptions options) {
+        public SolrQueryResults<T> Execute(ISolrQuery q, QueryOptions options)
+        {
             var param = GetAllParameters(q, options);
             var results = new SolrQueryResults<T>();
             var r = connection.Get(Handler, param);
@@ -595,7 +649,8 @@ namespace SolrNet.Impl {
         /// <param name="q"></param>
         /// <param name="options"></param>
         /// <returns></returns>
-        public SolrMoreLikeThisHandlerResults<T> Execute(SolrMLTQuery q, MoreLikeThisHandlerQueryOptions options) {
+        public SolrMoreLikeThisHandlerResults<T> Execute(SolrMLTQuery q, MoreLikeThisHandlerQueryOptions options)
+        {
             var param = GetAllMoreLikeThisHandlerParameters(q, options).ToList();
             var r = connection.Get(MoreLikeThisHandler, param);
             var qr = mlthResultParser.Parse(r);

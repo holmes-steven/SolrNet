@@ -14,7 +14,7 @@
 			<int name="matches">17</int>
 			<arr name="groups">
 				<lst>
-					<int name="groupValue">2</int>
+					<int name="groupValue">true</int>
 					<result name="doclist" numFound="13" start="0">
 						<doc>
 							<str name="id">GB18030TEST</str>
@@ -32,7 +32,7 @@
 					</result>
 				</lst>
 				<lst>
-					<int name="groupValue">1</int>
+					<int name="groupValue">false</int>
 					<result name="doclist" numFound="4" start="0">
 						<doc>
 							<str name="id">F8V7067-APL-KIT</str>
